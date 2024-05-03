@@ -1,11 +1,6 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
-#include "WiFiCredentials.h"
-
-
-// Wi-Fi credentials
-const char* ssid = "YOUR_WIFI_SSID";
-const char* password = "YOUR_WIFI_PASSWORD";
+#include "WiFiCredentials.h" // Include the WiFiCredentials.h file
 
 // Web server object
 ESP8266WebServer server(80);
@@ -32,13 +27,11 @@ void handleRoot() {
 void setup() {
   Serial.begin(115200);
   Serial.println("Connecting to Wi-Fi");
-
-  // Connect to Wi-Fi
-  WiFi.begin(ssid, password);
+ 
+  WiFi.begin(SSID, PASSWORD);  
   while (WiFi.status() != WL_CONNECTED) {
-    Serial.println(String(SSID));
-    Serial.println(String(PASSWORD));
     delay(1000);
+    Serial.print(".");
   }
 
   Serial.println("");
