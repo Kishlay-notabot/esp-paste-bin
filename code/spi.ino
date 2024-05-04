@@ -3,8 +3,8 @@
 #include <FS.h>
 #include <ArduinoJson.h>
 
-const char* ssid = "Akhilesh";
-const char* password = "@Nukisu1234";
+const char* ssid = "YOUR_WIFI_SSID";
+const char* password = "YOUR_WIFI_PASSWORD";
 
 ESP8266WebServer server(80);
 
@@ -18,18 +18,7 @@ void handleRoot() {
     server.send(404, "text/plain", "File not found");
   }
 }
-//download
-void handleDownloadJson() {
-  File file = SPIFFS.open("/data.json", "r");
-  if (file) {
-    server.sendHeader("Content-Type", "application/json");
-    server.sendHeader("Content-Disposition", "attachment; filename=data.json");
-    server.streamFile(file, "application/json");
-    file.close();
-  } else {
-    server.send(404, "text/plain", "File not found");
-  }
-}
+
 void handleSaveData() {
   if (server.method() == HTTP_POST) {
     StaticJsonDocument<1024> doc;
@@ -73,13 +62,10 @@ void setup() {
   Serial.println("");
   Serial.print("Connected to WiFi network with IP Address: ");
   Serial.println(WiFi.localIP());
-server.serveStatic("/", SPIFFS, "/"); //very imp line
 
   server.on("/", handleRoot);
   server.on("/save", handleSaveData);
   server.on("/get", handleGetData);
-  
-  server.on("/download", handleDownloadJson);
   server.begin();
 }
 
