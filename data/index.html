@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Data Form</title>
+  <script>
+    function saveData() {
+      const formData = new FormData(document.getElementById('userForm'));
+      const data = JSON.stringify(Object.fromEntries(formData));
+
+      fetch('/save', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: data
+      })
+      .then(response => response.text())
+      .then(data => {
+        console.log(data);
+        // Handle the response from the server
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
+
+    function loadData() {
+      fetch('/get')
+        .then(response => response.json())
+        .then(data => {
+          // Update the form fields with the retrieved data
+          const form = document.getElementById('userForm');
+          for (const [key, value] of Object.entries(data)) {
+            const field = form.elements[key];
+            if (field) {
+              field.value = value;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+
+    window.addEventListener('load', loadData);
+  </script>
+</head>
+<body>
+<img src="hi.png">
+  <h1>User Data Form</h1>
+  <form id="userForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name"><br><br>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email"><br><br>
+
+    <label for="age">Age:</label>
+    <input type="number" id="age" name="age"><br><br>
+
+    <button type="button" onclick="saveData()">Save Data</button>
+  </form>
+</body>
+</html>
